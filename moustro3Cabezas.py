@@ -6,6 +6,7 @@ class Node:
         self.apellido_materno = apellido_materno
         self.data = data
         self.next = None
+        self.next_next = None
         self.pointer = pointer
 
     def get_node(self):
@@ -146,12 +147,18 @@ class List:
 
             print("3")
             print("Ultimo dato dato " + str(sig.data))
-
+            print(cur.data)
             #print("dato anterior "+str(sig.data))\
             if new_node.data < cur.data:
                 print("Nuevo nodo es menor")
-                sig = new_node
-                cur.next = sig
+                cur = new_node
+                print(cur.data)
+                print(cur.next)
+                '''if cur.next is None:
+                    print("a")
+
+                    cur.next = sig'''
+
             else:
                 print("Nuevo nodo es mayor")
                 cur.next = new_node
