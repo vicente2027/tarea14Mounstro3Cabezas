@@ -6,7 +6,6 @@ class Node:
         self.apellido_materno = apellido_materno
         self.data = data
         self.next = None
-        self.next_next = None
         self.pointer = pointer
 
     def get_node(self):
@@ -98,15 +97,21 @@ class List:
         self.cont_imp = 0
         self.sum = 0
         self.elem = None
+        self.anterior = Node()
 
     def get_head(self):
         return self.head
 
     def append(self, data): # Metodo para insertar nodo
-        self.cont += 1
-        if data % 2 != 0:
-            self.cont_imp += 1
-        new_node = Node(data)
+
+        new_node = Node(None, None, None, data)
+        cur = self.head
+        while cur.next != None:
+            cur = cur.next
+        cur.next = new_node
+
+    def append_node(self, node): # Metodo para insertar nodo
+        new_node = node
         cur = self.head
         while cur.next != None:
             cur = cur.next
@@ -139,29 +144,43 @@ class List:
                 cur = cur.next # next
                 #print(cur.data)
                 sig = cur
-                while cur.next != None:
+                '''while cur.next != None:
                     cur = cur.next  # next
                     sig = cur
-
-                print("Ultimo dato "+str(sig.data))
+                print("Ultimo dato Segundo While "+str(sig.data))'''
 
             print("3")
+            while cur.next != None:
+                cur = cur.next  # next
+                sig = cur
+            print("Ultimo dato Segundo While " + str(sig.data))
+
             print("Ultimo dato dato " + str(sig.data))
             print(cur.data)
+            #print(cur)
             #print("dato anterior "+str(sig.data))\
+            print(new_node.data)
+            print("Si " + str(new_node.data) +" es menor a " + str(cur.data))
+            #   si    16    menor a 9
             if new_node.data < cur.data:
-                print("Nuevo nodo es menor")
+                print(str(new_node.data) + " es menor")
                 cur = new_node
+
+                self.display()
                 print(cur.data)
                 print(cur.next)
-                '''if cur.next is None:
+                if cur.next is None:
                     print("a")
 
-                    cur.next = sig'''
-
+                    cur.next = sig
+                    #cur.next.data = sig.data
+                    print(cur.data)
+                    self.display()
             else:
-                print("Nuevo nodo es mayor")
+                print(str(new_node.data) + " es mayor")
                 cur.next = new_node
+                self.display()
+
 
             #cur.next = new_node                                        # inserta el nuevo numero en la siguiente posision.
             #print("Dato nuevo "+ str(cur.next.data))
@@ -171,7 +190,97 @@ class List:
             #self.head.next = prev
 
 
+    def append_sorted2(self, data): # este metodo
+        new_node = Node(None, None, None, data)
+        cur = Node()
 
+        if self.is_empty(): # Si la lista esta vacia
+            cur = self.head
+            while cur.next != None:
+                cur = cur.next
+            cur.next = new_node
+
+        else: # Si no esta vacia
+            print("Paso 1")
+            cur = self.head
+            anterior = Node()
+
+            while (cur.next != None) and cur.next.data < new_node.data: # Cuando el nuevo numero es mayor al numero anterior,
+                print("Paso 2")
+                cur = cur.next # next
+                anterior = cur # anterior
+
+            print("Paso 3")
+            cur.anterior = anterior
+            print("current.anterior.data "+str(cur.anterior.data))
+            print("dato actual cur " + str(cur.data))
+            print("self anterior.data primero "+str(self.anterior.data))
+            print("nuevo node "+ str(new_node.data))
+
+
+            cur.next = new_node                                     # inserta el nuevo numero en la siguiente posision.
+
+            if self.anterior.data is None:
+                self.anterior.data = 0
+            tem = self.anterior.data
+            print(tem)
+            if self.anterior.data > new_node.data:
+                print("xD")
+                print(tem)
+                self.append(tem)
+
+            self.anterior = cur.next # meter if si no funciona
+            '''if self.anterior.data > cur.next.data:
+                self.append(self.anterior)
+                self.display()'''
+            print("self anterior.data "+str(self.anterior.data))
+            self.display()
+            #self.append() # necesario
+
+
+    def append_sorted3(self, data): # este metodo
+
+        node_nuevo = Node(None, None, None, data)
+        node_cabeza = self.head
+        node_anterior = self.anterior
+
+        if self.is_empty(): # Si la lista esta vacia
+            print("Vacia")
+            node_cabeza.next = node_nuevo # Priximo nodo igual a nuevo nodo
+            node_anterior.next = node_cabeza.next # Nodo anterior igual primer nodo
+        else:
+            print("Nodo anterior "+str(node_anterior.next.data))
+            self.display()
+            if node_nuevo.data < node_anterior.next.data:
+                print("Node nuevo "+str(node_nuevo.data) + " es menor a node anterior " + str(node_anterior.next.data))
+                boolean = False
+                while boolean is False: #(node_cabeza.next.data and node_nuevo.data) < node_anterior.next.data: # Mientras nuevo nodo sea menor a nodo anterior
+                    if node_nuevo.data < node_anterior.next.data:
+                        node_cabeza.next = node_nuevo
+                    else:
+
+                    node_cabeza = node_cabeza.next
+                    print("Nodo nuevo " + str() + " menor a ")
+                    print(node_cabeza.data)
+                #node_cabeza.next = node_nuevo
+                self.display()
+
+            else:
+                print("Node nuevo " + str(node_nuevo.data) + " es mayor a node anterior " + str(node_anterior.next.data))
+                while node_cabeza.next != None:
+                    node_cabeza = node_cabeza.next
+                node_cabeza.next = node_nuevo
+
+
+
+            node_anterior.next = node_cabeza.next # set el ultimo nodo
+
+
+
+            '''while node_cabeza.next != None:
+                node_cabeza = node_cabeza.next
+            node_cabeza.next = node_nuevo
+            node_anterior.next = node_cabeza.next'''
     def addition(self): # Metodo para sumar nodos
         cur = self.head
         while cur.next != None:
@@ -221,6 +330,14 @@ class List:
             elems.append(cur_node.data)
         print(elems)
 
+    def display2(self):
+
+        cur_node = self.head
+        while cur_node.next != None:
+            cur_node = cur_node.next
+            print(cur_node.data)
+
+
     def get(self, index):
         if index >= self.length():
             print("ERROR: 'Get' Index out of range!")
@@ -251,6 +368,15 @@ class List:
 
 
 my_list = List()
+my_list.append_sorted3(3)
+my_list.append_sorted3(4)
+my_list.append_sorted3(2)
+
+
+
+my_list.display()
+
+
 #my_list.append(1)
 #my_list.append(4)
 #my_list.append(6)
@@ -258,13 +384,24 @@ my_list = List()
 #my_list.append_test("Vicente")
 #my_list.head.order_by_name("Vicente")
 
-my_list.append_sorted(1)
+'''my_list.append_sorted(1)
 my_list.append_sorted(9)
 my_list.append_sorted(16)
-my_list.append_sorted(11)
+my_list.append_sorted(10)'''
 
-my_list.display()
+#my_list.append_sorted2(9)
+#my_list.append_sorted2(1)
+#my_list.append_sorted2(16)
+#my_list.append_sorted2(10)
+#my_list.append_sorted2(15)
 
+
+
+#my_list.append_sorted3(9)
+#my_list.append_sorted3(1)
+
+#my_list.display()
+#my_list.display2()
 #my_list.append_sorted()
 
 
